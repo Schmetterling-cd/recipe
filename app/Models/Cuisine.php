@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Cuisine extends Model
 {
@@ -18,6 +17,9 @@ class Cuisine extends Model
         'code',
         'label',
     ];
+
+
+    public $timestamps = false;
 
 
     /**

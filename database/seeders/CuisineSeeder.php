@@ -3,22 +3,19 @@
 namespace Database\Seeders;
 
 use App\Models\Cuisine;
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class CuisineSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      */
     public function run(): void
     {
-        $this->call([
-            PermissionsSeeder::class,
-            CuisineSeeder::class,
+        Cuisine::create([
+            'code' => 'by',
+            'label' => 'Belarusian'
         ]);
     }
 }

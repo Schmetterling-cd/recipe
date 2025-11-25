@@ -1,12 +1,12 @@
 import requester from "../../modules/requester";
+import axios from "axios";
 
 export default {
     namespaced: true,
 
     state: {
-        user: null,
         isLoading: false,
-        isAuthenticated: localStorage.getItem('isAuthenticated') === 'true',
+        isAuthenticated: false,
     },
 
     getters: {
@@ -20,11 +20,20 @@ export default {
     },
 
     actions: {
+        getUser({ commit }) {
+            axios.get('/api/user')
+                .then(response => {
+                    if (response.data) {
+                        commit('setAuthenticated', true);
+                    }
+                })
+            ;
+        },
+
         login({ commit }, credentials) {
             return requester.sendGet('/sanctum/csrf-cookie')
                 .then(response => {return requester.sendPost('/login', credentials)})
                 .then(response => {
-                    localStorage.setItem('isAuthenticated', 'true');
                     commit('setAuthenticated', true);
                     return response;
                 })
@@ -35,7 +44,6 @@ export default {
             return requester.sendGet('/sanctum/csrf-cookie')
                 .then(response => {return requester.sendPost('/register', credentials)})
                 .then(data => {
-                    localStorage.setItem('isAuthenticated', 'true');
                     commit('setAuthenticated', true);
                     return data;
                 })
@@ -43,9 +51,8 @@ export default {
         },
 
         logout({ commit }) {
-            return requester.sendPost('logout')
+            return requester.sendPost('/logout')
                 .then(data => {
-                    localStorage.setItem('isAuthenticated', 'false');
                     commit('setAuthenticated', false);
                     return data;
                 })

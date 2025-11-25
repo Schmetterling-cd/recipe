@@ -21,13 +21,7 @@ class RecipeService implements RecipeInterface
      */
     public function get(int $id): RecipeResource
     {
-        $recipe = Recipe::with(['ingredients', 'cuisine'])->find($id);
-
-        if (Gate::inspect('view', $recipe)->denied()) {
-            throw new \Exception('Access denied.');
-        }
-
-        return new RecipeResource($recipe);
+        return new RecipeResource(Recipe::with(['ingredients', 'cuisine'])->find($id));
     }
 
 
