@@ -9,12 +9,11 @@
 
 <script>
 import Navigation from "./Navigation.vue";
-import RecipeList from "./RecipeList.vue";
-import Login from "./Login.vue";
-import Registration from "./Registration.vue";
+import {mapActions} from "vuex";
+
 export default {
     name: "App",
-    components: {Registration, Login, RecipeList, Navigation},
+    components: {Navigation},
     mounted() {
         window.addEventListener('show-toast', this.handleShowToast)
     },
@@ -22,11 +21,19 @@ export default {
         window.removeEventListener('show-toast', this.handleShowToast)
     },
     methods: {
+        ...mapActions('user', {
+            user: 'getUser',
+        }),
+
         handleShowToast(event) {
             if (this.$refs.toastComponent) {
                 this.$refs.toastComponent.addToast(event.detail)
             }
-        }
+        },
+    },
+
+    beforeMount() {
+        this.user();
     }
 }
 </script>

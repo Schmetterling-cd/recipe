@@ -12,21 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         if (!Schema::hasTable('cuisines')) {
-            Schema::create('cuisine', function (Blueprint $table) {
+            Schema::create('cuisines', function (Blueprint $table) {
                 $table->id()->primary();
-                $table->string('code');
+                $table->string('code')->unique();
                 $table->string('label');
             });
         }
 
         if (!Schema::hasTable('recipes')) {
-            Schema::create('recipe', function (Blueprint $table) {
+            Schema::create('recipes', function (Blueprint $table) {
                 $table->id()->primary();
                 $table->integer('user_id')->constrained();
                 $table->integer('cuisine_id')->constrained();
                 $table->string('name');
-                $table->text('description');
-                $table->string('image_path');
+                $table->text('description')->nullable();
+                $table->string('image_path')->nullable();
                 $table->timestamps();
             });
         }

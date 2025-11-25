@@ -35,7 +35,6 @@
                     </div>
                 </div>
 
-                <!-- Название блюда -->
                 <div class="form-section">
                     <label for="name" class="form-label">Name of the dish</label>
                     <input
@@ -49,9 +48,8 @@
                     >
                 </div>
 
-                <!-- Выбор кухни -->
                 <div class="form-section">
-                    <label for="cuisine" class="form-label">Кухня</label>
+                    <label for="cuisine" class="form-label">Cuisine</label>
                     <select v-if="isEditable"
                         id="cuisine"
                         v-model="form.cuisine_id"
@@ -67,12 +65,12 @@
                             {{ cuisine.label }}
                         </option>
                     </select>
-                    <span v-else>{{ cuisines.find(element => element.id === form.cuisine_id).label }}</span>
+                    <span v-else>{{ form.cuisine.label }}</span>
                 </div>
 
                 <!-- Описание -->
                 <div class="form-section">
-                    <label for="description" class="form-label">Описание приготовления</label>
+                    <label for="description" class="form-label">Description</label>
                     <textarea
                         id="description"
                         v-model="form.description"
@@ -101,7 +99,6 @@
                         </button>
                     </div>
 
-                    <!-- Таблица ингредиентов -->
                     <div class="ingredients-table">
                         <table class="editable-table">
                             <thead>
@@ -195,7 +192,7 @@
                             </svg>
                             Saving...
                         </span>
-                        <span v-else>{{ isEditing ? 'Update' : 'Create' }} рецепт</span>
+                        <span v-else>{{ isEditing ? 'Update' : 'Create' }} recipe</span>
                     </button>
                 </div>
             </form>
@@ -332,6 +329,10 @@ export default {
                         name: data.name || '',
                         description: data.description || '',
                         cuisine_id: data.cuisine.id || '',
+                        cuisine: data.cuisine || {
+                            id: null,
+                            label: null
+                        },
                         image: data.image || null, // base64 строка
                         ingredients: data.ingredients.map(ing => ({
                                 id: ing.id || null,

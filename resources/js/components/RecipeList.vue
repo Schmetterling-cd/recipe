@@ -14,7 +14,7 @@
                         class="search-input"
                     >
                 </div>
-                <button class="add-btn" @click="handleAdd">
+                <button :disabled="!isAuthenticated" class="add-btn" @click="handleAdd">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
                     </svg>
@@ -47,7 +47,6 @@
                 </thead>
                 <tbody>
                 <tr v-for="recipe in recipes" :key="recipe.id" class="table-row">
-                    <!-- Edit Column -->
                     <td class="action-cell">
                         <button class="icon-btn edit-btn" @click="handleEdit(recipe.id)" title="Редактировать">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -165,6 +164,7 @@
 
 <script>
 import requester from "../modules/requester";
+import {mapGetters} from "vuex";
 
 export default {
     name: 'RecipeList',
@@ -189,7 +189,8 @@ export default {
         }
     },
     computed: {
-        // Видимые номера страниц для пагинации
+        ...mapGetters('user', ['isAuthenticated']),
+
         visiblePages() {
             const pages = []
             const total = this.totalPages;

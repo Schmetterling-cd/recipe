@@ -383,7 +383,6 @@ export default {
     justify-content: center;
 }
 
-/* Адаптивность */
 @media (max-width: 480px) {
     .forgot-password-card {
         padding: 24px;

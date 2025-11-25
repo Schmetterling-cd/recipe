@@ -68,7 +68,7 @@ class RecipeController extends Controller
 
         $recipeData = $this->validateRecipeData($request);
         $recipe->fill($recipeData);
-        $id = $recipeService->save($recipe, $this->validateIngredients($request), $recipeData['image']);
+        $id = $recipeService->save($recipe, $this->validateIngredients($request), $recipeData['image'] ?? null);
 
         return $this->sendRedirect('/recipe/rec/' . $id);
     }
@@ -78,19 +78,7 @@ class RecipeController extends Controller
      */
     public function rec($id, RecipeInterface $recipeService)
     {
-        try {
-            return $recipeService->get($id)->response();
-        } catch (\Exception $exception) {
-            Log::error(
-                'Failed to fetch the record id: {id}. System message: {exception}',
-                [
-                    'id' => $id,
-                    'exception' => $exception->getMessage(),
-                ]
-            );
-
-            return $this->sendMessage('Failed to fetch record.');
-        }
+        return $recipeService->get($id)->response();
     }
 
     /**

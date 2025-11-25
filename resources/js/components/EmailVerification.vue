@@ -1,5 +1,5 @@
 <template>
-    <div class="verification-container">
+    <div class="login-container">
         <div class="verification-card">
             <div class="verification-icon">
                 <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -50,15 +50,6 @@ export default {
 </script>
 
 <style scoped>
-.verification-container {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 20px;
-}
-
 .verification-card {
     background: white;
     padding: 40px;
@@ -172,13 +163,6 @@ export default {
     }
 }
 
-.button-loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Адаптивность */
 @media (max-width: 480px) {
     .verification-card {
         padding: 24px;
@@ -198,7 +182,6 @@ export default {
     }
 }
 
-/* Анимации */
 .verification-card {
     animation: fadeInUp 0.6s ease;
 }
