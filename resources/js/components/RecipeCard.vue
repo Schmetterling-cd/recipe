@@ -2,7 +2,7 @@
     <div class="login-container">
         <div class="common-card-large">
             <h1 class="common-title-large">
-                {{ isEditing ? 'Editing a recipe' : 'New recipe' }}
+                {{ header }}
             </h1>
 
             <form @submit.prevent="handleSubmit" class="recipe-form">
@@ -11,7 +11,7 @@
                     <div class="image-upload-container">
                         <div v-if="form.image" class="image-preview">
                             <img :src="form.image" alt="Preview" class="preview-image">
-                            <button :disabled="!isEditable" type="button" @click="removeImage" class="remove-image-btn">
+                            <button v-if="isAuthenticated && isEditable" :disabled="!isEditable" type="button" @click="removeImage" class="remove-image-btn">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                                 </svg>
@@ -89,6 +89,7 @@
                             @click="addIngredient"
                             class="add-button"
                             :disabled="!isEditable"
+                            v-if="isAuthenticated && isEditable"
                         >
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -104,65 +105,66 @@
                                 <th>Name</th>
                                 <th>Quantity</th>
                                 <th>Unit</th>
-                                <th>Actions</th>
+                                <th v-if="isAuthenticated && isEditable">Delete</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="(ingredient, index) in form.ingredients" :key="ingredient.id">
-                                <td>
-                                    <input
-                                        v-model="ingredient.name"
-                                        placeholder="Ingredient name"
-                                        class="common-input"
-                                        :class="{ 'error': !ingredient.name && ingredient.touched }"
-                                        @blur="ingredient.touched = true"
-                                        :readonly="!isEditable"
-                                    >
-                                </td>
-                                <td>
-                                    <input
-                                        v-model="ingredient.count"
-                                        type="number"
-                                        placeholder="0"
-                                        min="0"
-                                        step="0.1"
-                                        class="common-input number-input"
-                                        :class="{ 'error': (!ingredient.count && ingredient.count !== 0) && ingredient.touched }"
-                                        @blur="ingredient.touched = true"
-                                        :readonly="!isEditable"
-                                    >
-                                </td>
-                                <td>
-                                    <input
-                                        v-model="ingredient.unit"
-                                        class="common-input"
-                                        :class="{ 'error': !ingredient.unit && ingredient.touched }"
-                                        @blur="ingredient.touched = true"
-                                        :readonly="!isEditable"
-                                    >
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button
-                                            type="button"
-                                            @click="removeIngredient(index)"
-                                            class="action-btn delete-btn"
-                                            :disabled="form.ingredients.length === 1 || !isEditable"
+                                <tr v-for="(ingredient, index) in form.ingredients" :key="ingredient.id">
+                                    <td>
+                                        <input
+                                            v-model="ingredient.name"
+                                            placeholder="Ingredient name"
+                                            class="common-input"
+                                            :class="{ 'error': !ingredient.name && ingredient.touched }"
+                                            @blur="ingredient.touched = true"
+                                            :readonly="!isEditable"
                                         >
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M4 7H20M10 11V17M14 11V17M5 7L6 19C6 19.5304 6.21071 20.0391 6.58579 20.4142C6.96086 20.7893 7.46957 21 8 21H16C16.5304 21 17.0391 20.7893 17.4142 20.4142C17.7893 20.0391 18 19.5304 18 19L19 7M9 7V4C9 3.73478 9.10536 3.48043 9.29289 3.29289C9.48043 3.10536 9.73478 3 10 3H14C14.2652 3 14.5196 3.10536 14.7071 3.29289C14.8946 3.48043 15 3.73478 15 4V7"
-                                                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                    <td>
+                                        <input
+                                            v-model="ingredient.count"
+                                            type="number"
+                                            placeholder="0"
+                                            min="0"
+                                            step="0.1"
+                                            class="common-input number-input"
+                                            :class="{ 'error': (!ingredient.count && ingredient.count !== 0) && ingredient.touched }"
+                                            @blur="ingredient.touched = true"
+                                            :readonly="!isEditable"
+                                        >
+                                    </td>
+                                    <td>
+                                        <input
+                                            v-model="ingredient.unit"
+                                            class="common-input"
+                                            :class="{ 'error': !ingredient.unit && ingredient.touched }"
+                                            @blur="ingredient.touched = true"
+                                            :readonly="!isEditable"
+                                        >
+                                    </td>
+                                    <td v-if="isAuthenticated && isEditable">
+                                        <div class="action-buttons">
+                                            <button
+                                                type="button"
+                                                @click="removeIngredient(index)"
+                                                class="action-btn delete-btn"
+                                                :disabled="form.ingredients.length === 1 || !isEditable"
+                                            >
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M4 7H20M10 11V17M14 11V17M5 7L6 19C6 19.5304 6.21071 20.0391 6.58579 20.4142C6.96086 20.7893 7.46957 21 8 21H16C16.5304 21 17.0391 20.7893 17.4142 20.4142C17.7893 20.0391 18 19.5304 18 19L19 7M9 7V4C9 3.73478 9.10536 3.48043 9.29289 3.29289C9.48043 3.10536 9.73478 3 10 3H14C14.2652 3 14.5196 3.10536 14.7071 3.29289C14.8946 3.48043 15 3.73478 15 4V7"
+                                                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
 
-                            <tr v-if="form.ingredients.length === 0">
-                                <td colspan="4" class="no-data">
-                                    No ingredients. Click "Add Ingredient"
-                                </td>
-                            </tr>
+                                <tr v-if="form.ingredients.length === 0">
+                                    <td colspan="4" class="no-data">
+                                        No ingredients. Click "Add Ingredient"
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -174,21 +176,15 @@
                         @click="handleCancel"
                         class="cancel-button"
                     >
-                        Отмена
+                        Back
                     </button>
                     <button
                         type="submit"
                         :disabled="loading || !isFormValid || !isEditable"
                         class="common-button-primary"
+                        v-if="isAuthenticated && isEditable"
                     >
-                        <span v-if="loading" class="common-button-loading">
-                            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            Saving...
-                        </span>
-                        <span v-else>{{ isEditing ? 'Update' : 'Create' }} recipe</span>
+                        <span>{{ isEditing ? 'Update' : 'Create' }} recipe</span>
                     </button>
                 </div>
             </form>
@@ -202,6 +198,7 @@
 
 <script>
 import requester from "../modules/requester";
+import {mapGetters} from "vuex";
 
 export default {
     name: 'RecipeCard',
@@ -224,20 +221,35 @@ export default {
         }
     },
     computed: {
+        ...mapGetters('user', ['isAuthenticated']),
+
         isEditing() {
             return this.$route.params.id && this.$route.params.id !== 'new';
         },
+
         isFormValid() {
             return this.form.name &&
                 this.form.description &&
                 this.form.cuisine_id &&
                 this.form.ingredients.every(ing => ing.name && ing.count && ing.unit)
         },
+
+        header() {
+            switch (true) {
+                case !this.isAuthenticated:
+                    return 'Recipe card';
+                case this.isEditing && this.isAuthenticated:
+                    return 'Editing a recipe';
+                default:
+                    return 'New recipe';
+            }
+        },
     },
     methods: {
         triggerFileInput() {
             this.$refs.fileInput?.click()
         },
+
         handleImageUpload(event) {
             const file = event.target.files[0]
             if (file) {
@@ -248,12 +260,14 @@ export default {
                 reader.readAsDataURL(file)
             }
         },
+
         removeImage() {
             this.form.image = null
             if (this.$refs.fileInput) {
                 this.$refs.fileInput.value = ''
             }
         },
+
         addIngredient() {
             this.form.ingredients.push({
                 id: null,
@@ -263,11 +277,13 @@ export default {
                 touched: false
             })
         },
+
         removeIngredient(index) {
             if (this.form.ingredients.length > 1) {
                 this.form.ingredients.splice(index, 1)
             }
         },
+
         async fetchCuisines() {
             requester.sendGet('/api/dimension/cuisine')
                 .then(response => {
@@ -275,6 +291,7 @@ export default {
                 })
             ;
         },
+
         async handleSubmit() {
             if (!this.isFormValid) return;
             this.loading = true;
@@ -290,12 +307,14 @@ export default {
             await requester.sendPost('/api/recipe/save', submitData);
             this.loading = false;
         },
+
         handleCancel() {
             this.$router.push({name: 'RecipeList'});
         }
     },
-    mounted() {
+    beforeMount() {
         this.fetchCuisines();
+
         if (this.isEditing) {
             requester.sendGet('/api/recipe/getCard/' + this.$route.params.id)
                 .then(response => {
@@ -353,6 +372,7 @@ export default {
 }
 
 .image-upload-container {
+    width: max-content;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -378,6 +398,7 @@ export default {
 }
 
 .image-preview {
+    width: max-content;
     position: relative;
     display: inline-block;
 }
@@ -462,7 +483,6 @@ export default {
 .editable-table td {
     padding: 12px 16px;
     border-bottom: 1px solid #e2e8f0;
-    vertical-align: top;
 }
 
 .number-input {
@@ -471,6 +491,11 @@ export default {
 
 .action-buttons {
     display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
     gap: 8px;
 }
 
@@ -514,6 +539,7 @@ export default {
 }
 
 .cancel-button {
+    height: 100%;
     background: transparent;
     color: #4a5568;
     border: 2px solid #e2e8f0;

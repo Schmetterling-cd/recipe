@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\Recipe\RecipeInterface;
+use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Recipe;
 use App\Rules\Base64Image;
@@ -70,7 +71,10 @@ class RecipeController extends Controller
         $recipe->fill($recipeData);
         $id = $recipeService->save($recipe, $this->validateIngredients($request), $recipeData['image'] ?? null);
 
-        return $this->sendRedirect('/recipe/rec/' . $id);
+        return ResponseHelper::create()
+            ->withRedirect('/recipe/rec/' . $id)
+            ->send()
+        ;
     }
 
     /**
@@ -86,9 +90,16 @@ class RecipeController extends Controller
      */
     public function delete(Request $request, RecipeInterface $recipeService)
     {
+        $responseHelper = ResponseHelper::create();
+
         return $recipeService->delete($request->get('id'))
-            ? $this->sendRedirect('/')
-            : $this->sendMessage('Failed to delete record.', self::STATUS_ERROR)
+            ? $responseHelper
+                ->withRedirect('/')
+                ->withMessage('Deleted successfully!', self::STATUS_SUCCESS)
+                ->send()
+            : $responseHelper
+                ->withMessage('Failed to delete record.', self::STATUS_ERROR)
+                ->send()
         ;
     }
 }

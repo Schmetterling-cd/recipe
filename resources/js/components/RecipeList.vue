@@ -14,7 +14,7 @@
                         class="search-input"
                     >
                 </div>
-                <button :disabled="!isAuthenticated" class="add-btn" @click="handleAdd">
+                <button v-if="isAuthenticated" :disabled="!isAuthenticated" class="add-btn" @click="handleAdd">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
                     </svg>
@@ -26,78 +26,74 @@
         <div class="table-wrapper">
             <table class="recipes-table">
                 <thead>
-                <tr>
-                    <th class="action-col">Edit</th>
-                    <th class="name-col" @click="sortBy('name')">
-                        Name
-                        <span class="sort-icon" v-if="sortField === 'name'">
-                            {{ sortDirection === 'asc' ? '↑' : '↓' }}
-                        </span>
-                    </th>
-                    <th class="cuisine-col" @click="sortBy('updated_at')">
-                        Date of update
-                        <span class="sort-icon" v-if="sortField === 'updated_at'">
-                            {{ sortDirection === 'asc' ? '↑' : '↓' }}
-                        </span>
-                    </th>
-                    <th class="cuisine-col">Cuisine</th>
-                    <th class="ingredients-col">Ingredients</th>
-                    <th class="action-col">Delete</th>
-                </tr>
+                    <tr>
+                        <th class="table-col">{{ isAuthenticated ? 'Edit' : 'View' }}</th>
+                        <th class="table-col" @click="sortBy('name')">
+                            Name
+                            <span class="sort-icon" v-if="sortField === 'name'">
+                                {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                            </span>
+                        </th>
+                        <th class="table-col" @click="sortBy('updated_at')">
+                            Updated <br> date
+                            <span class="sort-icon" v-if="sortField === 'updated_at'">
+                                {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                            </span>
+                        </th>
+                        <th class="table-col">Cuisine</th>
+                        <th class="ingredients-col">Ingredients</th>
+                        <th class="table-col" v-if="isAuthenticated">Delete</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr v-for="recipe in recipes" :key="recipe.id" class="table-row">
-                    <td class="action-cell">
-                        <button class="icon-btn edit-btn" @click="handleEdit(recipe.id)" title="Редактировать">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-                            </svg>
-                        </button>
-                    </td>
+                    <tr v-for="recipe in recipes" :key="recipe.id" class="table-row">
+                        <td class="table-col">
+                            <button class="icon-btn edit-btn" @click="handleEdit(recipe.id)" title="Редактировать">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                                </svg>
+                            </button>
+                        </td>
 
-                    <!-- Name Column -->
-                    <td class="name-cell">
-                        <span class="recipe-name">{{ recipe.name }}</span>
-                    </td>
+                        <td class="table-col">
+                            <span class="recipe-name">{{ recipe.name }}</span>
+                        </td>
 
-                    <td class="cuisine-cell">
-                        <span class="cuisine-tag">{{ recipe.updated_at }}</span>
-                    </td>
+                        <td class="table-col">
+                            <span class="cuisine-tag">{{ recipe.updated_at }}</span>
+                        </td>
 
-                    <!-- Cuisine Column -->
-                    <td class="cuisine-cell">
-                        <span class="cuisine-tag">{{ recipe.cuisine }}</span>
-                    </td>
+                        <td class="table-col">
+                            <span class="cuisine-tag">{{ recipe.cuisine }}</span>
+                        </td>
 
-                    <!-- Ingredients Column -->
-                    <td class="ingredients-cell">
-                        <div class="ingredients-list">
-                            <span
-                                v-for="ingredient in recipe.ingredients.slice(0, 3)"
-                                :key="ingredient"
-                                class="ingredient-tag"
-                            >
-                                {{ ingredient }}
-                            </span>
-                            <span v-if="recipe.ingredients.length > 3" class="ingredient-more">
-                                +{{ recipe.ingredients.length - 3 }} ещё
-                            </span>
-                        </div>
-                    </td>
+                        <td class="ingredients-cell">
+                            <div class="ingredients-list">
+                                <span
+                                    v-for="ingredient in recipe.ingredients.slice(0, 3)"
+                                    :key="ingredient"
+                                    class="ingredient-tag"
+                                >
+                                    {{ ingredient }}
+                                </span>
+                                <span v-if="recipe.ingredients.length > 3" class="ingredient-more">
+                                    +{{ recipe.ingredients.length - 3 }} ещё
+                                </span>
+                            </div>
+                        </td>
 
-                    <!-- Delete Column -->
-                    <td class="action-cell">
-                        <button :disabled="!recipe.isDeletable" class="icon-btn delete-btn" @click="handleDelete(recipe.id)" title="Удалить">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                            </svg>
-                        </button>
-                    </td>
-                </tr>
+                        <!-- Delete Column -->
+                        <td v-if="isAuthenticated && recipe.isDeletable" class="table-col">
+                            <button :disabled="!recipe.isDeletable" class="icon-btn delete-btn" @click="handleDelete(recipe.id)" title="Удалить">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
 
-            <!-- Empty State -->
             <div v-if="recipes.length === 0" class="empty-state">
                 <svg width="64" height="64" viewBox="0 0 24 24" fill="#cbd5e0">
                     <path d="M8.1 13.34l2.83-2.83L3.91 3.5c-1.56 1.56-1.56 4.09 0 5.66l4.19 4.18zm6.78-1.81c1.53.71 3.68.21 5.27-1.38 1.91-1.91 2.28-4.65.81-6.12-1.46-1.46-4.2-1.1-6.12.81-1.59 1.59-2.09 3.74-1.38 5.27L3.7 19.87l1.41 1.41L12 14.41l6.88 6.88 1.41-1.41L13.41 13l1.47-1.47z"/>
@@ -106,7 +102,6 @@
             </div>
         </div>
 
-        <!-- Пагинация -->
         <div v-if="recipes.length > 0" class="pagination-container">
             <div class="pagination-info">
                 Showed {{ startItem }}-{{ endItem }} from {{ totalItems }} records
@@ -289,6 +284,8 @@ export default {
                     this.endItem = meta.to;
                     this.totalItems = meta.total;
 
+                    this.recipes = [];
+
                     this.recipes = data.map(recipe => ({
                         id: recipe.id,
                         name: recipe.name,
@@ -301,7 +298,7 @@ export default {
             ;
         }
     },
-    mounted() {
+    beforeMount() {
         this.fetchRecords();
     }
 }
@@ -383,29 +380,6 @@ export default {
 
 .table-row:hover {
     background: #f7fafc;
-}
-
-/* Columns */
-.action-col {
-    width: 80px;
-    text-align: center;
-}
-
-.name-col {
-    width: 200px;
-}
-
-.cuisine-col {
-    width: 150px;
-}
-
-.ingredients-col {
-    min-width: 300px;
-}
-
-/* Action Cells */
-.action-cell {
-    text-align: center;
 }
 
 .icon-btn {

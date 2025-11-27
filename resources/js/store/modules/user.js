@@ -14,13 +14,19 @@ export default {
 
     mutations: {
         setAuthenticated(state, isAuthenticated) {
-            state.isAuthenticated = isAuthenticated
+            state.isAuthenticated = isAuthenticated;
         },
     },
 
     actions: {
-        getUser() {
-            return requester.sendGet('/api/user');
+        getUser({ commit }) {
+            return requester.sendGet('/api/user')
+                .then(data => {
+                    if (data) {
+                        commit('setAuthenticated', true);
+                    }
+                })
+            ;
         },
 
         login({ commit }, credentials) {
@@ -45,9 +51,9 @@ export default {
 
         logout({ commit }) {
             return requester.sendPost('/logout')
-                .then(data => {
+                .then(() => {
                     commit('setAuthenticated', false);
-                    return data;
+                    window.location.reload();
                 })
         },
 

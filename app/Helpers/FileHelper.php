@@ -5,7 +5,7 @@ namespace App\Helpers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class FileHelper
+final class FileHelper
 {
     public static function saveBase64Image($base64String)
     {
