@@ -18,11 +18,10 @@ class EnsureEmailIsVerified
     {
         $user = $request->user();
 
-        if (!$user->user() ||
-            (
-                $user instanceof MustVerifyEmail
-                && !$user->hasVerifiedEmail()
-            )
+        if (
+            $user
+            && $user instanceof MustVerifyEmail
+            && !$user->hasVerifiedEmail()
         ) {
             return response()->json([
                 'action' => 'redirect',

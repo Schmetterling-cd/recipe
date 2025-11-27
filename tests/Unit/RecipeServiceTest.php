@@ -96,7 +96,7 @@ class RecipeServiceTest extends TestCase
 
 
     /** @test */
-    public function it_can_get_paginated_list_of_recipes_for_authenticated_user()
+    public function paginatedList()
     {
         for ($i = 0; $i < 15; $i++) {
             $recipe = $this->createRecipe();

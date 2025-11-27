@@ -1,5 +1,4 @@
 import requester from "../../modules/requester";
-import axios from "axios";
 
 export default {
     namespaced: true,
@@ -20,14 +19,8 @@ export default {
     },
 
     actions: {
-        getUser({ commit }) {
-            axios.get('/api/user')
-                .then(response => {
-                    if (response.data) {
-                        commit('setAuthenticated', true);
-                    }
-                })
-            ;
+        getUser() {
+            return requester.sendGet('/api/user');
         },
 
         login({ commit }, credentials) {

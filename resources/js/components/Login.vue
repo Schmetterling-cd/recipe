@@ -324,7 +324,6 @@ export default {
     color: #5a6fd8;
 }
 
-/* Адаптивность */
 @media (max-width: 480px) {
     .login-container {
         padding: 1rem;
