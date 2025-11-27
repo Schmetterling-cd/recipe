@@ -1,0 +1,36 @@
+FROM php:fpm
+
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+RUN apt-get update && apt-get install -y nodejs
+RUN apt-get update && apt-get install -y nodejs npm
+
+RUN apt-get update && apt-get install -y \
+        apt-utils \
+        libpq-dev \
+        libpng-dev \
+        libzip-dev \
+        zip unzip \
+        git && \
+        docker-php-ext-install mysqli && \
+        docker-php-ext-enable mysqli && \
+        docker-php-ext-install pdo pdo_mysql && \
+        docker-php-ext-install bcmath && \
+        docker-php-ext-install gd && \
+        docker-php-ext-install zip && \
+        apt-get clean && \
+        rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN pecl install xdebug && docker-php-ext-enable xdebug
+
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN curl -sS https://getcomposer.org/installer | php -- \
+    --filename=composer \
+    --install-dir=/usr/local/bin
+
+WORKDIR /var/www/html
+
+# Создаем скрипт для инициализации
+COPY docker-data/scripts/init.sh /usr/local/bin/init-app
+RUN chmod +x /usr/local/bin/init-app
+
+CMD ["init-app"]
