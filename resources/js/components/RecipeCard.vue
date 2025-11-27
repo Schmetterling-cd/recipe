@@ -1,7 +1,7 @@
 <template>
     <div class="login-container">
-        <div class="recipe-card">
-            <h1 class="recipe-title">
+        <div class="common-card-large">
+            <h1 class="common-title-large">
                 {{ isEditing ? 'Editing a recipe' : 'New recipe' }}
             </h1>
 
@@ -42,7 +42,7 @@
                         v-model="form.name"
                         type="text"
                         placeholder="Enter the name of the dish"
-                        class="form-input"
+                        class="common-input"
                         required
                         :readonly="!isEditable"
                     >
@@ -51,10 +51,10 @@
                 <div class="form-section">
                     <label for="cuisine" class="form-label">Cuisine</label>
                     <select v-if="isEditable"
-                        id="cuisine"
-                        v-model="form.cuisine_id"
-                        class="form-select"
-                        required
+                            id="cuisine"
+                            v-model="form.cuisine_id"
+                            class="common-input"
+                            required
                     >
                         <option value="">Choose a cuisine</option>
                         <option
@@ -68,7 +68,6 @@
                     <span v-else>{{ form.cuisine.label }}</span>
                 </div>
 
-                <!-- Описание -->
                 <div class="form-section">
                     <label for="description" class="form-label">Description</label>
                     <textarea
@@ -76,13 +75,12 @@
                         v-model="form.description"
                         placeholder="Describe the cooking process..."
                         rows="5"
-                        class="form-textarea"
+                        class="common-input"
                         required
                         :readonly="!isEditable"
                     ></textarea>
                 </div>
 
-                <!-- Ингредиенты -->
                 <div class="form-section">
                     <div class="section-header">
                         <label class="section-label">Ingredients</label>
@@ -115,7 +113,7 @@
                                     <input
                                         v-model="ingredient.name"
                                         placeholder="Ingredient name"
-                                        class="table-input"
+                                        class="common-input"
                                         :class="{ 'error': !ingredient.name && ingredient.touched }"
                                         @blur="ingredient.touched = true"
                                         :readonly="!isEditable"
@@ -128,7 +126,7 @@
                                         placeholder="0"
                                         min="0"
                                         step="0.1"
-                                        class="table-input number-input"
+                                        class="common-input number-input"
                                         :class="{ 'error': (!ingredient.count && ingredient.count !== 0) && ingredient.touched }"
                                         @blur="ingredient.touched = true"
                                         :readonly="!isEditable"
@@ -137,7 +135,7 @@
                                 <td>
                                     <input
                                         v-model="ingredient.unit"
-                                        class="table-input"
+                                        class="common-input"
                                         :class="{ 'error': !ingredient.unit && ingredient.touched }"
                                         @blur="ingredient.touched = true"
                                         :readonly="!isEditable"
@@ -160,7 +158,6 @@
                                 </td>
                             </tr>
 
-                            <!-- Сообщение если нет ингредиентов -->
                             <tr v-if="form.ingredients.length === 0">
                                 <td colspan="4" class="no-data">
                                     No ingredients. Click "Add Ingredient"
@@ -171,7 +168,6 @@
                     </div>
                 </div>
 
-                <!-- Кнопки действия -->
                 <div class="form-actions">
                     <button
                         type="button"
@@ -183,9 +179,9 @@
                     <button
                         type="submit"
                         :disabled="loading || !isFormValid || !isEditable"
-                        class="submit-button"
+                        class="common-button-primary"
                     >
-                        <span v-if="loading" class="button-loading">
+                        <span v-if="loading" class="common-button-loading">
                             <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -197,8 +193,7 @@
                 </div>
             </form>
 
-            <!-- Сообщения -->
-            <div v-if="errorMessage" class="error-message">
+            <div v-if="errorMessage" class="common-error-message">
                 {{ errorMessage }}
             </div>
         </div>
@@ -210,7 +205,6 @@ import requester from "../modules/requester";
 
 export default {
     name: 'RecipeCard',
-
     data() {
         return {
             isEditable: true,
@@ -229,12 +223,10 @@ export default {
             }
         }
     },
-
     computed: {
         isEditing() {
             return this.$route.params.id && this.$route.params.id !== 'new';
         },
-
         isFormValid() {
             return this.form.name &&
                 this.form.description &&
@@ -242,12 +234,10 @@ export default {
                 this.form.ingredients.every(ing => ing.name && ing.count && ing.unit)
         },
     },
-
     methods: {
         triggerFileInput() {
             this.$refs.fileInput?.click()
         },
-
         handleImageUpload(event) {
             const file = event.target.files[0]
             if (file) {
@@ -258,14 +248,12 @@ export default {
                 reader.readAsDataURL(file)
             }
         },
-
         removeImage() {
             this.form.image = null
             if (this.$refs.fileInput) {
                 this.$refs.fileInput.value = ''
             }
         },
-
         addIngredient() {
             this.form.ingredients.push({
                 id: null,
@@ -275,13 +263,11 @@ export default {
                 touched: false
             })
         },
-
         removeIngredient(index) {
             if (this.form.ingredients.length > 1) {
                 this.form.ingredients.splice(index, 1)
             }
         },
-
         async fetchCuisines() {
             requester.sendGet('/api/dimension/cuisine')
                 .then(response => {
@@ -289,13 +275,9 @@ export default {
                 })
             ;
         },
-
         async handleSubmit() {
             if (!this.isFormValid) return;
-
             this.loading = true;
-
-                // Подготовка данных для отправки
             const submitData = {
                 ...this.form,
                 ingredients: this.form.ingredients.map(ing => ({
@@ -305,25 +287,19 @@ export default {
                     unit: ing.unit
                 }))
             }
-
             await requester.sendPost('/api/recipe/save', submitData);
-
             this.loading = false;
         },
-
         handleCancel() {
             this.$router.push({name: 'RecipeList'});
         }
     },
-
-     mounted() {
+    mounted() {
         this.fetchCuisines();
-
         if (this.isEditing) {
             requester.sendGet('/api/recipe/getCard/' + this.$route.params.id)
                 .then(response => {
                     const data = response.data;
-
                     this.form = {
                         id: data.id,
                         name: data.name || '',
@@ -333,18 +309,16 @@ export default {
                             id: null,
                             label: null
                         },
-                        image: data.image || null, // base64 строка
+                        image: data.image || null,
                         ingredients: data.ingredients.map(ing => ({
-                                id: ing.id || null,
-                                name: ing.name || '',
-                                count: ing.count || '',
-                                unit: ing.unit || '',
-                                touched: false
-                            }))
+                            id: ing.id || null,
+                            name: ing.name || '',
+                            count: ing.count || '',
+                            unit: ing.unit || '',
+                            touched: false
+                        }))
                     };
-
                     this.isEditable = data.isEditable;
-
                     this.$forceUpdate();
                 })
             ;
@@ -354,24 +328,6 @@ export default {
 </script>
 
 <style scoped>
-.recipe-card {
-    background: white;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    max-width: 900px;
-    margin: 0 auto;
-    animation: fadeInUp 0.6s ease;
-}
-
-.recipe-title {
-    font-size: 32px;
-    font-weight: 700;
-    color: #1a202c;
-    margin-bottom: 32px;
-    text-align: center;
-}
-
 .recipe-form {
     display: flex;
     flex-direction: column;
@@ -396,7 +352,6 @@ export default {
     font-size: 14px;
 }
 
-/* Загрузка изображения */
 .image-upload-container {
     display: flex;
     flex-direction: column;
@@ -456,34 +411,6 @@ export default {
     background: #e53e3e;
 }
 
-/* Поля формы */
-.form-input,
-.form-select,
-.form-textarea {
-    width: 100%;
-    padding: 12px 16px;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
-}
-
-.form-input:focus,
-.form-select:focus,
-.form-textarea:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.form-textarea {
-    resize: vertical;
-    min-height: 120px;
-    font-family: inherit;
-}
-
-/* Таблица ингредиентов */
 .section-header {
     display: flex;
     justify-content: space-between;
@@ -538,28 +465,6 @@ export default {
     vertical-align: top;
 }
 
-.table-input,
-.table-select {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #e2e8f0;
-    border-radius: 4px;
-    font-size: 14px;
-    transition: all 0.3s ease;
-}
-
-.table-input:focus,
-.table-select:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
-}
-
-.table-input.error,
-.table-select.error {
-    border-color: #f56565;
-}
-
 .number-input {
     text-align: right;
 }
@@ -601,7 +506,6 @@ export default {
     padding: 40px !important;
 }
 
-/* Кнопки действия */
 .form-actions {
     display: flex;
     gap: 16px;
@@ -626,61 +530,7 @@ export default {
     background: #f7fafc;
 }
 
-.submit-button {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 160px;
-}
-
-.submit-button:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-}
-
-.submit-button:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    transform: none;
-}
-
-/* Сообщения */
-.error-message {
-    background: #fed7d7;
-    color: #c53030;
-    padding: 12px 16px;
-    border-radius: 8px;
-    font-size: 14px;
-    margin-top: 16px;
-    text-align: center;
-}
-
-.button-loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Адаптивность */
 @media (max-width: 768px) {
-    .recipe-card {
-        padding: 24px;
-        margin: 0 10px;
-    }
-
-    .recipe-title {
-        font-size: 24px;
-    }
-
     .section-header {
         flex-direction: column;
         align-items: flex-start;
@@ -698,17 +548,6 @@ export default {
     .editable-table th,
     .editable-table td {
         padding: 8px 12px;
-    }
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
     }
 }
 </style>

@@ -14,22 +14,10 @@ import {mapActions} from "vuex";
 export default {
     name: "App",
     components: {Navigation},
-    mounted() {
-        window.addEventListener('show-toast', this.handleShowToast)
-    },
-    beforeUnmount() {
-        window.removeEventListener('show-toast', this.handleShowToast)
-    },
     methods: {
         ...mapActions('user', {
             user: 'getUser',
         }),
-
-        handleShowToast(event) {
-            if (this.$refs.toastComponent) {
-                this.$refs.toastComponent.addToast(event.detail)
-            }
-        },
     },
 
     beforeMount() {

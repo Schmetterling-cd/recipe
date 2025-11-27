@@ -1,3 +1,5 @@
+@import 'vue3-toastify/dist/index.css';
+
 body {
     padding: 0 0 0 0;
     margin: 0 0 0 0;
@@ -11,4 +13,278 @@ body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 
     width: 100%;
+}
+
+/* Card styles */
+.common-card {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    animation: fadeInUp 0.6s ease;
+}
+
+.common-card-large {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    animation: fadeInUp 0.6s ease;
+}
+
+/* Icon styles */
+.common-icon {
+    color: #667eea;
+    margin-bottom: 24px;
+}
+
+.common-icon-success {
+    color: #48bb78;
+    margin-bottom: 20px;
+}
+
+/* Title styles */
+.common-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 16px;
+    line-height: 1.2;
+}
+
+.common-title-large {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+/* Message styles */
+.common-message {
+    color: #4a5568;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 32px;
+}
+
+/* Form styles */
+.common-form {
+    text-align: left;
+}
+
+.common-form-group {
+    margin-bottom: 24px;
+}
+
+.common-label {
+    display: block;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.common-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.common-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.common-input:disabled {
+    background-color: #f7fafc;
+    cursor: not-allowed;
+}
+
+/* Button styles */
+.common-button-primary {
+    width: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.common-button-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.common-button-primary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.common-button-secondary {
+    width: 100%;
+    background: transparent;
+    color: #667eea;
+    border: 2px solid #667eea;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.common-button-secondary:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+/* Help section styles */
+.common-help-section {
+    text-align: left;
+    background: #f7fafc;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    margin-bottom: 24px;
+}
+
+.common-help-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 12px;
+}
+
+.common-help-list {
+    color: #4a5568;
+    font-size: 14px;
+    line-height: 1.5;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.common-help-list li {
+    margin-bottom: 8px;
+    position: relative;
+    padding-left: 16px;
+}
+
+.common-help-list li:before {
+    content: "•";
+    color: #667eea;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+/* Email address style */
+.common-email-address {
+    color: #667eea;
+    background-color: #f7fafc;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+/* Back link styles */
+.common-back-link {
+    text-align: center;
+    color: #4a5568;
+    font-size: 14px;
+}
+
+.common-back-link-button {
+    background: none;
+    border: none;
+    color: #667eea;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-left: 4px;
+    font-size: 14px;
+}
+
+.common-back-link-button:hover {
+    color: #5a67d8;
+}
+
+/* Loading animation */
+.common-button-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Error message */
+.common-error-message {
+    background: #fed7d7;
+    color: #c53030;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-top: 16px;
+    text-align: center;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive styles */
+@media (max-width: 480px) {
+    .common-card,
+    .common-card-large {
+        padding: 24px;
+        margin: 0 10px;
+    }
+
+    .common-title {
+        font-size: 24px;
+    }
+
+    .common-help-section {
+        padding: 16px;
+    }
 }

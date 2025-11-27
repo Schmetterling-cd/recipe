@@ -1,5 +1,7 @@
 import axios from "axios";
 import router from "./router";
+import { toast } from "vue3-toastify";
+import appStore from '../store/appStore';
 
 export default {
     isRedirect(data) {
@@ -10,23 +12,37 @@ export default {
         return data.hasOwnProperty('message');
     },
 
-    async responseHandler(response) {
+    isUnauthenticated(error) {
+        return error.hasOwnProperty('status') && error.status === 401;
+    },
+
+     responseHandler(response) {
         const data = response.data ?? {};
+
+        if (this.isHasMessage(data)) {
+            this.showMessage(data.message);
+        }
 
         if (this.isRedirect(data)) {
             router.push(data.to);
-            return;
-        }
-
-        if (this.isHasMessage(data)) {
-            this.showMessage(data);
         }
 
         return data;
     },
 
-    showMessage(message, type = 'success') {
-        window.toast[type](message);
+    errorHandler(error) {
+        if (this.isHasMessage(error)) {
+            this.showMessage(error.message, 'error');
+        }
+
+        if (this.isUnauthenticated(error)) {
+            appStore.commit('user/setAuthenticated', false);
+            router.push({ name: 'Login' });
+        }
+    },
+
+    showMessage(message, type = 'info') {
+        toast[type](message);
     },
 
     sendPost(url, data, config = {}) {
@@ -35,7 +51,8 @@ export default {
                 return this.responseHandler(response);
             })
             .catch(error => {
-                this.showMessage(error.message, 'error');
+                this.errorHandler(error);
+                return error;
             })
         ;
     },
@@ -46,7 +63,8 @@ export default {
                 return this.responseHandler(response);
             })
             .catch(error => {
-                this.showMessage(error.message, 'error');
+                this.errorHandler(error);
+                return error;
             })
         ;
     },
@@ -57,7 +75,8 @@ export default {
                 return this.responseHandler(response);
             })
             .catch(error => {
-                this.showMessage(error.message, 'error');
+                this.errorHandler(error);
+                return error;
             })
         ;
     },
