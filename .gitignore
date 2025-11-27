@@ -28,6 +28,6 @@ Homestead.json
 .env.production
 .phpactor.json
 auth.json
-/docker-data/
+/docker-data/database
 /.vite/
 /.idea/
