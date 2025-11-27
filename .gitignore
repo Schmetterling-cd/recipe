@@ -31,3 +31,4 @@ auth.json
 /docker-data/database
 /.vite/
 /.idea/
+/docker-compose.yml
