@@ -1,6 +1,7 @@
 import axios from "axios";
 import router from "./router";
 import { toast } from "vue3-toastify";
+import loader from './loader';
 import appStore from '../store/appStore';
 
 export default {
@@ -46,11 +47,15 @@ export default {
     },
 
     sendPost(url, data, config = {}) {
+        loader.showLoader(url);
+
         return axios.post(url, data, config)
             .then(response => {
+                loader.hideLoader(url);
                 return this.responseHandler(response);
             })
             .catch(error => {
+                loader.hideLoader(url);
                 this.errorHandler(error);
                 return error;
             })
@@ -58,11 +63,15 @@ export default {
     },
 
     sendDelete(url, config = {}) {
+        loader.showLoader(url);
+
         return axios.delete(url, config)
             .then(response => {
+                loader.hideLoader(url);
                 return this.responseHandler(response);
             })
             .catch(error => {
+                loader.hideLoader(url);
                 this.errorHandler(error);
                 return error;
             })
@@ -70,11 +79,15 @@ export default {
     },
 
     async sendGet(url, config) {
+        loader.showLoader(url);
+
         return await axios.get(url, config)
             .then(response => {
+                loader.hideLoader(url);
                 return this.responseHandler(response);
             })
             .catch(error => {
+                loader.hideLoader(url);
                 this.errorHandler(error);
                 return error;
             })
