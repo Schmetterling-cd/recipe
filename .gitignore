@@ -32,3 +32,4 @@ auth.json
 /.vite/
 /.idea/
 /docker-compose.yml
+/develop.docker-compose.yml
