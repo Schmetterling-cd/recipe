@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('object');
             $table->string('action');
             $table->string('label');
+            $table->unique(['object', 'action']);
             $table->timestamps();
         });
 
@@ -31,6 +32,7 @@ return new class extends Migration
             $table->id()->primary();
             $table->bigInteger('user_id');
             $table->bigInteger('role_id');
+            $table->unique(['user_id', 'role_id']);
             $table->timestamps();
         });
 
@@ -38,6 +40,7 @@ return new class extends Migration
             $table->id()->primary();
             $table->bigInteger('role_id');
             $table->bigInteger('permission_id');
+            $table->unique(['role_id', 'permission_id']);
             $table->timestamps();
         });
     }

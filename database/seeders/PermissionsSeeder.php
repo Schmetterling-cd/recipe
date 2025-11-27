@@ -18,36 +18,36 @@ class PermissionsSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::create([
+        $user = User::firstOrCreate([
             'name' => 'Super Admin',
-            'email' => 'admin@admin.com',
+            'email' => env('ADMIN_EMAIL'),
             'email_verified_at' => now(),
-            'password' => Hash::make('zaq12wsxCDE#3edcvfr4$RFVbgt5'),
+            'password' => Hash::make(env('ADMIN_PASSWORD')),
         ]);
 
-        $role = Role::create([
+        $role = Role::firstOrCreate([
             'code' => 'super-user',
             'label' => 'Site Administrator',
         ]);
 
-        UsersToRoles::create([
+        UsersToRoles::firstOrCreate([
             'user_id' => $user->id,
             'role_id' => $role->id,
         ]);
 
-        Permission::create([
+        Permission::firstOrCreate([
             'object' => Recipe::class,
             'action' => 'update',
             'label' => 'Update ' . Recipe::class,
         ]);
 
-        Permission::create([
+        Permission::firstOrCreate([
             'object' => Recipe::class,
             'action' => 'read',
             'label' => 'Read ' . Recipe::class,
         ]);
 
-        Permission::create([
+        Permission::firstOrCreate([
             'object' => Recipe::class,
             'action' => 'delete',
             'label' => 'Update ' . Recipe::class,

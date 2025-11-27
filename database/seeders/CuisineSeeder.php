@@ -13,7 +13,7 @@ class CuisineSeeder extends Seeder
      */
     public function run(): void
     {
-        Cuisine::create([
+        Cuisine::firstOrCreate([
             'code' => 'by',
             'label' => 'Belarusian'
         ]);

@@ -4,7 +4,7 @@ OWNER_USER=`id -u`
 OWNER_GROUP=`id -g`
 DIRECTORY=.
 
-while getopts ":u:g:d:h:" OPTNAME; do
+while getopts ":u:g:d:h" OPTNAME; do
 	case "${OPTNAME}" in
 		u)
 			OWNER_USER=${OPTARG}
@@ -60,16 +60,40 @@ echo "Making directory '${DIRECTORY}' r/w-accessible to '${OWNER_USER}:${OWNER_G
 	chown -R "${OWNER_USER}:${OWNER_GROUP}" "${DIRECTORY}"
 	echo "done." >&15
 
-	echo -n "- Changing rights to ug=rw,o=r ... " >&15
+	echo -n "- Setting base permissions ... " >&15
 	chmod -R ug=rw,o=r "${DIRECTORY}"
 	echo "done." >&15
 
-	echo -n "- Recursively changing rights of existing directories to u=rwx,g=rwxs,o=rx ... " >&15
+	echo -n "- Setting directory permissions ... " >&15
 	find "${DIRECTORY}" -type d -exec chmod u=rwx,g=rwxs,o=rx {} \;
 	echo "done." >&15
 
-	echo -n "- Recursively changing rights of existing files to ug=rw,o=r ... " >&15
-	find "${DIRECTORY}" -type f -exec chmod ug=rw,o=r {} \;
+	# ИЗМЕНЕНО: Для обычных файлов ставим 644, но исключаем бинарники
+	echo -n "- Setting file permissions (644) ... " >&15
+	find "${DIRECTORY}" -type f -exec chmod 644 {} \;
 	echo "done." >&15
-} 15>&1 16>&2 >/dev/null 2>&1
+
+	# ДОБАВЛЕНО: Для бинарных файлов ставим 755
+	echo -n "- Setting execute permissions for binaries (755) ... " >&15
+	# Все файлы в .bin папках
+	find "${DIRECTORY}" -type f -path "*/.bin/*" -exec chmod 755 {} \; 2>/dev/null || true
+	# Esbuild и другие известные бинарники
+	find "${DIRECTORY}" -type f \( -name "esbuild" -o -name "vite" -o -name "*.node" -o -name "*.so" \) -exec chmod 755 {} \; 2>/dev/null || true
+	# Node.js бинарники
+	find "${DIRECTORY}" -type f -name "*.bin" -exec chmod 755 {} \; 2>/dev/null || true
+	echo "done." >&15
+
+	# ДОБАВЛЕНО: Проверка ключевых файлов
+	echo -n "- Verifying key binaries ... " >&15
+	if [ -f "${DIRECTORY}/.bin/vite" ]; then
+		chmod 755 "${DIRECTORY}/.bin/vite"
+		echo -n "vite " >&15
+	fi
+	if [ -f "${DIRECTORY}/@esbuild/linux-x64/bin/esbuild" ]; then
+		chmod 755 "${DIRECTORY}/@esbuild/linux-x64/bin/esbuild"
+		echo -n "esbuild " >&15
+	fi
+	echo "verified." >&15
+
+} 15>&1 >/dev/null 2>&1
 echo "Completed."

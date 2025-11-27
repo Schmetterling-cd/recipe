@@ -20,8 +20,8 @@ export default defineConfig({
             port: 5173
         },
         watch: {
-            usePolling: true,  // Принудительное опросление
-            interval: 1000,    // Каждую секунду
+            usePolling: true,
+            interval: 1000,
             binaryInterval: 3000
         }
     },
