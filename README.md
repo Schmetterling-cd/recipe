@@ -44,15 +44,6 @@ Wait for all tasks in the **translator** service to complete.
 
 The application is ready when you see completion messages in the logs (Starting PHP-FPM...).
 
-### 6. Database Seeding (Optional)
-
-To populate the cuisines reference data, run:
-
-```bash
-# Execute database seeder
-docker-compose exec translator php artisan db:seed
-```
-
 ## 🌐 Access the Application
 
 Once all services are running, access the application at:  
