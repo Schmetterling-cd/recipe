@@ -36,3 +36,4 @@ auth.json
 vite.config.js
 test.vite.config.js
 .env.example
+test.docker-compose.yml
