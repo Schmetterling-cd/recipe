@@ -53,7 +53,6 @@ export default {
             return requester.sendPost('/logout')
                 .then(() => {
                     commit('setAuthenticated', false);
-                    window.location.reload();
                 })
         },
 

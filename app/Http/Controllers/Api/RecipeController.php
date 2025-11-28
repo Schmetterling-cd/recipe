@@ -7,7 +7,9 @@ use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Recipe;
 use App\Rules\Base64Image;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Log;
 
 class RecipeController extends Controller
@@ -47,7 +49,7 @@ class RecipeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, RecipeInterface $recipeService)
+    public function index(Request $request, RecipeInterface $recipeService): AnonymousResourceCollection
     {
         return $recipeService->getList(
             $request->get('size') ?? 5,
@@ -60,7 +62,7 @@ class RecipeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function save(Request $request, RecipeInterface $recipeService)
+    public function save(Request $request, RecipeInterface $recipeService): JsonResponse
     {
         $recipe = $request->has('id') && empty($request->get('id')) === false
             ? Recipe::find($request->get('id'))
@@ -69,10 +71,10 @@ class RecipeController extends Controller
 
         $recipeData = $this->validateRecipeData($request);
         $recipe->fill($recipeData);
-        $id = $recipeService->save($recipe, $this->validateIngredients($request), $recipeData['image'] ?? null);
+        $recipeService->save($recipe, $this->validateIngredients($request), $recipeData['image'] ?? null);
 
         return ResponseHelper::create()
-            ->withRedirect('/recipe/rec/' . $id)
+            ->withRedirect('/')
             ->send()
         ;
     }
@@ -88,7 +90,7 @@ class RecipeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function delete(Request $request, RecipeInterface $recipeService)
+    public function delete(Request $request, RecipeInterface $recipeService): JsonResponse
     {
         $responseHelper = ResponseHelper::create();
 

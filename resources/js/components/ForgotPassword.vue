@@ -49,7 +49,7 @@
 
                 <div class="common-back-link">
                     <span>Remembered your password?</span>
-                    <button @click="handleBackToLogin" class="common-back-link-button">Войти в аккаунт</button>
+                    <button @click="handleBackToLogin" class="common-back-link-button">Log in</button>
                 </div>
             </div>
 
@@ -145,5 +145,9 @@ export default {
 .forgot-password-content,
 .email-sent-content {
     text-align: center;
+}
+
+.common-button-primary {
+    width: 100%!important;
 }
 </style>

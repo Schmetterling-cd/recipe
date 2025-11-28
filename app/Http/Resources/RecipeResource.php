@@ -23,7 +23,7 @@ class RecipeResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'ingredients' => IngredientResource::collection($this->ingredients()->get()),
-            'image' => Storage::url($this->image_path),
+            'image' => $this->image_path ? Storage::url($this->image_path) : null,
             'isEditable' => Gate::inspect('update', Recipe::find($this->id))->allowed(),
             'isDeletable' => Gate::inspect('delete', Recipe::find($this->id))->allowed(),
             'updated_at' => date("d.m.Y H:i", strtotime($this->updated_at)),

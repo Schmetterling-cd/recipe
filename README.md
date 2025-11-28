@@ -58,7 +58,11 @@ docker-compose exec translator php artisan db:seed
 Once all services are running, access the application at:  
 **http://localhost**
 
-Mail service:
+## 📧 Email Testing with MailHog
+
+MailHog is an email testing tool for development environments. It intercepts all outgoing emails from the application without sending them to real recipients.
+
+**All application-generated emails will be captured by MailHog** and available for viewing in the web interface at:  
 **http://localhost:8025/**
 
 ## 📁 Project settings structure

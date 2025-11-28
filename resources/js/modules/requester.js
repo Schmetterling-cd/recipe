@@ -51,13 +51,14 @@ export default {
 
         return axios.post(url, data, config)
             .then(response => {
-                loader.hideLoader(url);
                 return this.responseHandler(response);
             })
             .catch(error => {
-                loader.hideLoader(url);
                 this.errorHandler(error);
                 return error;
+            })
+            .finally(() => {
+                loader.hideLoader(url);
             })
         ;
     },
@@ -67,13 +68,14 @@ export default {
 
         return axios.delete(url, config)
             .then(response => {
-                loader.hideLoader(url);
                 return this.responseHandler(response);
             })
             .catch(error => {
-                loader.hideLoader(url);
                 this.errorHandler(error);
                 return error;
+            })
+            .finally(() => {
+                loader.hideLoader(url);
             })
         ;
     },
@@ -83,13 +85,14 @@ export default {
 
         return await axios.get(url, config)
             .then(response => {
-                loader.hideLoader(url);
                 return this.responseHandler(response);
             })
             .catch(error => {
-                loader.hideLoader(url);
                 this.errorHandler(error);
                 return error;
+            })
+            .finally(() => {
+                loader.hideLoader(url);
             })
         ;
     },

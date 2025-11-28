@@ -40,5 +40,12 @@ if [ "$USER_EXISTS" -eq 0 ]; then
     php artisan db:seed --class=PermissionsSeeder
 fi
 
+CUISINE_EXISTS=$(php artisan tinker --execute="echo \App\Models\Cuisine::count();" 2>/dev/null || echo "0")
+
+if [ "$CUISINE_EXISTS" -eq 0 ]; then
+    echo "Seed cuisine dimension..."
+    php artisan db:seed --class=CuisineSeeder
+fi
+
 echo "Starting PHP-FPM..."
 exec php-fpm
