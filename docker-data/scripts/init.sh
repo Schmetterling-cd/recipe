@@ -3,6 +3,7 @@
 set -e
 
 echo "Checking application setup..."
+composer update
 composer install
 
 echo "Permission set up..."

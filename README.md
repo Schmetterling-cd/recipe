@@ -40,7 +40,7 @@ docker-compose up -d
 
 ### 5. Service Initialization
 
-Wait for all tasks in the **translator** service to complete. You can monitor the progress using:
+Wait for all tasks in the **translator** service to complete.
 
 The application is ready when you see completion messages in the logs (Starting PHP-FPM...).
 
