@@ -62,7 +62,6 @@ Once all services are running, access the application at:
 ## 📁 Project settings structure
 
 ```
-├── app/                 # Application source code
 ├── docker-compose.yml   # Container orchestration
 ├── vite.config.js      # Frontend build configuration
 ├── .env                # Environment variables
