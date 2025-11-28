@@ -35,3 +35,4 @@ auth.json
 /develop.docker-compose.yml
 vite.config.js
 test.vite.config.js
+.env.example
