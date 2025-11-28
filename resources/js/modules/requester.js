@@ -96,6 +96,18 @@ export default {
             })
         ;
     },
+
+    search(url, config) {
+        return axios.get(url, config)
+            .then(response => {
+                return this.responseHandler(response);
+            })
+            .catch(error => {
+                this.errorHandler(error);
+                return error;
+            })
+        ;
+    }
 }
 
 

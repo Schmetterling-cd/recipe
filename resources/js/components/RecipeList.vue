@@ -9,7 +9,6 @@
                     </svg>
                     <input
                         v-model="searchQuery"
-                        @input="handleSearch"
                         placeholder="Search..."
                         class="search-input"
                     >
@@ -45,7 +44,7 @@
                         <th class="table-col" v-if="isAuthenticated">Delete</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="!fetchTable">
                     <tr v-for="recipe in recipes" :key="recipe.id" class="table-row">
                         <td class="table-col">
                             <button class="icon-btn edit-btn" @click="handleEdit(recipe.id)" :title="recipe.isEditable ? 'Edit' : 'View'">
@@ -97,7 +96,9 @@
                 </tbody>
             </table>
 
-            <div v-if="recipes.length === 0" class="empty-state">
+            <Spinner v-if="fetchTable"></Spinner>
+
+            <div v-if="recipes.length === 0 && !fetchTable" class="empty-state">
                 <svg width="64" height="64" viewBox="0 0 24 24" fill="#cbd5e0">
                     <path d="M8.1 13.34l2.83-2.83L3.91 3.5c-1.56 1.56-1.56 4.09 0 5.66l4.19 4.18zm6.78-1.81c1.53.71 3.68.21 5.27-1.38 1.91-1.91 2.28-4.65.81-6.12-1.46-1.46-4.2-1.1-6.12.81-1.59 1.59-2.09 3.74-1.38 5.27L3.7 19.87l1.41 1.41L12 14.41l6.88 6.88 1.41-1.41L13.41 13l1.47-1.47z"/>
                 </svg>
@@ -161,11 +162,13 @@
 </template>
 
 <script>
+import Spinner from "./Spinner.vue";
 import requester from "../modules/requester";
 import {mapGetters} from "vuex";
 
 export default {
     name: 'RecipeList',
+    components: { Spinner },
     data() {
         return {
             // Данные
@@ -183,7 +186,8 @@ export default {
             // Поиск и сортировка
             searchQuery: '',
             sortField: 'updated_at',
-            sortDirection: 'desc'
+            sortDirection: 'desc',
+            fetchTable: false,
         }
     },
     computed: {
@@ -218,6 +222,14 @@ export default {
                 this.fetchRecords();
             },
         },
+        searchQuery: {
+            immediate: false,
+            handler(newVal, oldVal) {
+                if (newVal !== oldVal) {
+                    this.handleSearch();
+                }
+            },
+        }
     },
     methods: {
         handleEdit(recipeId) {
@@ -260,9 +272,7 @@ export default {
         },
 
         handleSearch() {
-            if (this.searchQuery.length > 3) {
-                this.resetToFirstPage();
-            }
+            this.resetToFirstPage();
         },
 
         sortBy(field) {
@@ -276,7 +286,9 @@ export default {
         },
 
         fetchRecords() {
-            requester.sendGet('/api/recipe/getList', {
+            this.fetchTable = true;
+
+            requester.search('/api/recipe/getList', {
                 params: {
                     page: this.currentPage,
                     size: this.itemsPerPage,
@@ -308,11 +320,12 @@ export default {
                     }))
 
                     this.$forceUpdate();
+                    this.fetchTable = false;
                 })
             ;
         }
     },
-    beforeMount() {
+    mounted() {
         this.fetchRecords();
     }
 }
