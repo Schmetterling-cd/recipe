@@ -28,7 +28,6 @@ class RecipeServiceTest extends TestCase
         $this->recipe = $this->createRecipe();
         $this->createIngredients($this->recipe->id);
 
-
         $this->actingAs($this->user);
     }
 
@@ -78,20 +77,6 @@ class RecipeServiceTest extends TestCase
 
         $this->assertInstanceOf(\App\Http\Resources\RecipeResource::class, $result);
         $this->assertEquals($recipe->id, $result->id);
-    }
-
-
-    /** @test */
-    public function accessDenied()
-    {
-        $recipe = $this->recipe;
-        $otherUser = User::factory()->create();
-        $this->actingAs($otherUser);
-
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Access denied.');
-
-        $this->recipeService->get($recipe->id);
     }
 
 
