@@ -58,6 +58,8 @@ docker-compose exec translator php artisan db:seed
 Once all services are running, access the application at:  
 **http://localhost**
 
+Mail service:
+**http://localhost:8025/**
 
 ## 📁 Project settings structure
 
