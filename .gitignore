@@ -34,3 +34,4 @@ auth.json
 /docker-compose.yml
 /develop.docker-compose.yml
 vite.config.js
+test.vite.config.js

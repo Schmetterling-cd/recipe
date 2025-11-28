@@ -43,7 +43,7 @@ class RecipeService implements RecipeInterface
             $list->whereLike('name', "%{$searchQuery}%");
         }
 
-        if (Auth::check()) {
+        if (Auth::check() && !Auth::user()->hasRole(User::ROLE_SUPER_ADMIN)) {
             $list->where('user_id', '=', Auth::user()->id);
         }
 

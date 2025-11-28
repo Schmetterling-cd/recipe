@@ -16,6 +16,8 @@ class User extends Authenticatable implements MustVerifyEmail
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
 
+    public const ROLE_SUPER_ADMIN = 'super-user';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -70,7 +72,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function hasRole(string $code): bool
     {
-        return in_array($code, $this->roles()->get()->toArray());
+        return in_array($code, array_column($this->roles()->get()->toArray(), 'code'));
     }
 
 

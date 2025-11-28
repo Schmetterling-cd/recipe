@@ -3,34 +3,31 @@ import { useLoading } from 'vue-loading-overlay';
 const loading = useLoading();
 
 export default {
-    loader: {},
+    loader: null,
+    activeRequests: [],
 
-    showLoader(requestId) {
-        this.loader[requestId] = loading.show({
-            // опциональные параметры
-            color: '#007bff',
-            height: 64,
-            width: 64,
-            canCancel: false,
-            backgroundColor: '#000000',
-            opacity: 0.7
-        });
+    showLoader(requestName) {
+        this.activeRequests.push(requestName);
 
-        this.hideOtherLoaders(requestId);
-    },
-
-    hideOtherLoaders(requestId) {
-        for (let key in this.loader) {
-            if (key !== requestId) {
-                this.hideLoader(key);
-            }
+        if (this.loader === null) {
+            this.loader = loading.show({
+                // опциональные параметры
+                color: '#007bff',
+                height: 64,
+                width: 64,
+                canCancel: false,
+                backgroundColor: '#000000',
+                opacity: 0.7
+            });
         }
     },
 
-    hideLoader(requestId) {
-        if (this.loader.hasOwnProperty(requestId)) {
-            this.loader[requestId].hide();
-            delete this.loader[requestId];
+    hideLoader(requestName) {
+        this.activeRequests = this.activeRequests.filter(request => request !== requestName);
+
+        if (this.activeRequests.length === 0 && this.loader !== null) {
+            this.loader.hide();
+            this.loader = null;
         }
     },
 }

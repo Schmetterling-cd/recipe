@@ -50,7 +50,6 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    console.log(to);
     if (to.path !== from.path) {
         loader.showLoader(to.name);
     }

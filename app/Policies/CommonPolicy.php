@@ -7,8 +7,6 @@ use App\Models\User;
 
 class CommonPolicy
 {
-    protected const ROLE_SUPER_ADMIN = 'super-admin';
-
     /**
      * All actions allowed for super admin
      *
@@ -17,7 +15,7 @@ class CommonPolicy
      */
     public function before(User $user)
     {
-        return $user->hasRole(self::ROLE_SUPER_ADMIN)
+        return $user->hasRole(User::ROLE_SUPER_ADMIN)
             ? true
             : null
         ;

@@ -329,13 +329,15 @@ export default {
                             label: null
                         },
                         image: data.image || null,
-                        ingredients: data.ingredients.map(ing => ({
-                            id: ing.id || null,
-                            name: ing.name || '',
-                            count: ing.count || '',
-                            unit: ing.unit || '',
-                            touched: false
-                        }))
+                        ingredients: data.ingredients.length > 0
+                            ? data.ingredients.map(ing => ({
+                                id: ing.id || null,
+                                name: ing.name || '',
+                                count: ing.count || '',
+                                unit: ing.unit || '',
+                                touched: false
+                            }))
+                            : { id: null, name: '', count: '', unit: '', touched: false }
                     };
                     this.isEditable = data.isEditable;
                     this.$forceUpdate();
