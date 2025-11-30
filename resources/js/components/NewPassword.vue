@@ -269,6 +269,10 @@ export default {
     margin-top: 4px;
 }
 
+.common-button-primary {
+    width: 100%;
+}
+
 @media (max-width: 480px) {
     .password-strength {
         flex-direction: column;
